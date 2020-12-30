@@ -1,0 +1,14 @@
+{
+  "name": "denpo-entities",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Vlad Afonin <mytecor@ya.ru>",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha --watch --inline-diffs"
+  },
+  "devDependencies": {
+    "mocha": "^8.2.1",
+    "nodemon": "^2.0.6"
+  }
+}
