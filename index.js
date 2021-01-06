@@ -1,22 +1,27 @@
 
-module.exports = function dent(formated) {
+module.exports = function dent(input) {
 	let entities = []
-	let res = ''
+	let output = ''
 
 	// Core
-	let pos = 0, ch
+	let pos = 0, ch, terminal
 	move(0)
 
 	function move(offset = 1) {
 		let c = ch
 
-		ch = formated[pos += offset] || ''
-		if(ch == '\\') ch += formated[++pos]
+		ch = input[pos += offset] || ''
+		if(ch == '\\') {
+			ch = input[++pos]
+			terminal = false
+		}
+		else terminal = true
 
 		return c
 	}
 
 	function is(target) {
+		if(!terminal) return
 		if(typeof target == 'string') {
 			if(ch != target[0]) return
 
@@ -24,7 +29,7 @@ module.exports = function dent(formated) {
 
 			if(length == 1) return move()
 
-			let str = formated.substr(pos, length)
+			let str = input.substr(pos, length)
 			if(str == target) {
 				move(str.length)
 				return str
@@ -83,13 +88,13 @@ module.exports = function dent(formated) {
 		let length = 0
 
 		while(ch && !is(target)) {
-			let offset = res.length
+			let offset = output.length
 
 			let {text, ...cur} = link() || bold() || strikethrough() || underline() || italic() || pre() || code() || txt()
 
 			if(text) {
 				cur.length = text.length
-				res += text
+				output += text
 			}
 			length += cur.length
 
@@ -106,7 +111,7 @@ module.exports = function dent(formated) {
 	proc('')
 
 	return {
-		text: res,
+		text: output,
 		entities
 	}
 }
