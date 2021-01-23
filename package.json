@@ -1,11 +1,11 @@
 {
   "name": "denpo-entities",
   "description": "Markdown to telegram entities parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/denpo/denpo-entities"
+    "url": "git+https://github.com/denpojs/denpo-entities"
   },
   "author": "Vlad Afonin <mytecor@ya.ru>",
   "license": "MIT",
