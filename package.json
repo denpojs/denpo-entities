@@ -1,14 +1,23 @@
 {
   "name": "denpo-entities",
+  "description": "Markdown to telegram entities parser",
   "version": "1.0.0",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denpo/denpo-entities"
+  },
   "author": "Vlad Afonin <mytecor@ya.ru>",
   "license": "MIT",
   "scripts": {
     "test": "mocha --watch --inline-diffs"
   },
   "devDependencies": {
-    "mocha": "^8.2.1",
-    "nodemon": "^2.0.6"
-  }
+    "mocha": "^8.2.1"
+  },
+  "keywords": [
+    "telegram",
+    "markdown",
+    "parser"
+  ]
 }

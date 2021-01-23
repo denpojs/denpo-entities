@@ -5,7 +5,6 @@ module.exports = function dent(input) {
 
 	// Core
 	let pos = 0, ch, terminal
-	move(0)
 
 	function move(offset = 1) {
 		let c = ch
@@ -50,22 +49,43 @@ module.exports = function dent(input) {
 	}
 
 	// Lex
-	function simple(trigger, type) {
-		return () => is(trigger) && {
-			type,
-			length: proc(trigger)
+	function bold() {
+		return is('*') && {
+			type: 'bold',
+			length: proc('*')
 		}
 	}
 
-	let bold = simple('*', 'bold')
-	let code = simple('`', 'code')
-	let italic = simple('_', 'italic')
-	let underline = simple('__', 'underline')
-	let strikethrough = simple('~', 'strikethrough')
+	function code() {
+		return is('`') && {
+			type: 'code',
+			length: proc('`')
+		}
+	}
 
+	function italic() {
+		return is('_') && {
+			type: 'italic',
+			length: proc('_')
+		}
+	}
+
+	function underline() {
+		return is('__') && {
+			type: 'underline',
+			length: proc('__')
+		}
+	}
+
+	function strikethrough() {
+		return is('~') && {
+			type: 'strikethrough',
+			length: proc('~')
+		}
+	}
 
 	function link() {
-		if(is('[')) return {
+		return is('[') && {
 			type: 'text_link',
 			length: proc(']('),
 			url: before(')')
@@ -73,15 +93,15 @@ module.exports = function dent(input) {
 	}
 
 	function pre() {
-		if(is('```')) return {
+		return is('```') && {
 			type: 'pre',
 			language: before('\n'),
 			text: before('```').trim()
 		}
 	}
 
-	function txt() {
-		return {text: move()}
+	function token() {
+		return link() || bold() || strikethrough() || underline() || italic() || pre() || code() || {text: move()}
 	}
 
 	function proc(target) {
@@ -90,24 +110,25 @@ module.exports = function dent(input) {
 		while(ch && !is(target)) {
 			let offset = output.length
 
-			let {text, ...cur} = link() || bold() || strikethrough() || underline() || italic() || pre() || code() || txt()
+			let {text, ...current} = token()
 
 			if(text) {
-				cur.length = text.length
+				current.length = text.length
 				output += text
 			}
-			length += cur.length
+			length += current.length
 
-			if(cur.type) {
-				cur.offset = offset
+			if(current.type) {
+				current.offset = offset
 
-				entities.push(cur)
+				entities.push(current)
 			}
 		}
 
 		return length
 	}
 
+	move(0)
 	proc('')
 
 	return {
