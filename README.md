@@ -3,7 +3,19 @@ Markdown to telegram entities parser
 
 # Usage
 ```js
-import dent from 'denpo-entities'
+let dent = require('denpo-entities')
+let assert = require('assert').strict
 
-console.log(dent('*md text*'))
+assert.deepEqual(dent('*md text*'), {
+	entities: [
+		{
+			type: 'bold',
+			length: 7,
+			offset: 0
+		}
+	],
+	text: 'md text'
+})
 ```
+
+[Supported markdown style](https://core.telegram.org/bots/api#markdownv2-style)
